@@ -1,0 +1,20 @@
+# Ignore everything in root
+/*
+/*/
+
+# Git
+!.gitignore
+!.gitignore_global
+
+# Z Shell
+!.zshrc
+
+# Emacs
+!.emacs
+!.gnus
+!.aspell.en.pws
+!.emacs-themes/
+!.emacs-snippets/
+
+# Readme
+!README.md
