@@ -345,7 +345,7 @@ VAL:"
 (defun vg-lsp-mode-configure-servers()
   "Configure each server."
   ;; Clojure
-  (setq-default lsp-clojure-custom-server-command "/home/linuxbrew/.linuxbrew/bin/clojure-lsp")
+  (setq-default lsp-clojure-custom-server-command "/opt/homebrew/bin/clojure-lsp")
   ;; C/C++
   (setq-default
    lsp-clangd-binary-path "/usr/bin/clangd")
