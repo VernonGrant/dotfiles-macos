@@ -4,6 +4,52 @@ alias reload='. ~/.zshrc'
 # Clear all notifications.
 alias clear-notifications='killall NotificationCenter'
 
+# Restore permissions to their defaults.
+alias reset-permissions='find . -type f -exec chmod 644 {} \; && find . -type d -exec chmod 755 {} \;'
+
+###############################
+# Media And File Manipulation #
+###############################
+
+# ==============================================================================
+# Appends a random number to the end of each file matching the given file
+# extension.
+#
+# ARGUMENTS:
+# - $1 | The stand-alone file extension. (pdf, jpg, png, ...)
+#
+# OUTPUTS: void
+# RETURNS: void
+function files-append-random-number() {
+    local -r extension="${1}"
+
+    for i in *.$extension; do
+        [ -f "$i" ] || break
+        echo ${i%.*};
+        local new_name=${i%.*}-$RANDOM
+        mv $i ./$new_name.$extension
+    done
+}
+
+# ==============================================================================
+# Converts a PDF file to JPG images.
+#
+# ARGUMENTS:
+# - $1 | The name of the PDF file.
+#
+# REQUIRES:
+# - brew install poppler
+#
+# OUTPUTS: void
+# RETURNS: void
+function pdf-to-jpg() {
+    pdftoppm -jpeg -rx 200 -ry 200 $1 page
+}
+
+##############################
+# Block Social Media Helpers #
+##############################
+
 # ==============================================================================
 # Unblocks currently blocked social media websites. Must be used under sudo.
 #
@@ -11,8 +57,8 @@ alias clear-notifications='killall NotificationCenter'
 # - youtube
 # - instagram
 # - twitter
-#
 # OUTPUTS: The updated hosts file.
+#
 # RETURNS: void
 function social() {
     sudo cat /etc/hosts > ~/.hosts_old
@@ -65,7 +111,7 @@ function unsocial() {
 #
 # OUTPUTS: Creates a .temp folder in the current path containing the database
 # dump script.
-function generate_php_mysql_dump_script() {
+function generate-php-mysql-dump-script() {
     # create temp php dump script.
     local php_file_path="./.temp/tmp_db_dump.php"
 
