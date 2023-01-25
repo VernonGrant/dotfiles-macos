@@ -16,5 +16,11 @@
 !.emacs-themes/
 !.emacs-snippets/
 
+# NeoVim and Kitty
+!.config/
+.config/*
+!.config/kitty/
+!.config/nvim/
+
 # Readme
 !README.md
