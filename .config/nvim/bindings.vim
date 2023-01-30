@@ -225,7 +225,6 @@ nnoremap <F12> :call LoadProjectVimrc()<CR>
 " nnoremap <F11> :r ./
 
 " Notes.
-" nnoremap <leader>xg :find /home/vernon/Devenv/notes/goals.md<CR>
-" nnoremap <leader>xi :find /home/vernon/Devenv/notes/ideas.md<CR>
-" nnoremap <leader>xs :find /home/vernon/Devenv/notes/scratch.md<CR>
-" nnoremap <leader>xn :new /home/vernon/Devenv/notes/<C-r>=strftime('%Y-%m-%d')<CR>-.md<left><left><left>
+nnoremap <leader>cp :find /Users/vernon/Devenv/projects/<CR>
+nnoremap <leader>cn :find /Users/vernon/Devenv/notes/<CR>
+nnoremap <leader>ch :find /Users/vernon/<CR>

@@ -21,6 +21,10 @@
 .config/*
 !.config/kitty/
 !.config/nvim/
+!.vim/
+.vim/*
+!.vim/spell/
+.vim/spell/*.spl
 
 # Readme
 !README.md

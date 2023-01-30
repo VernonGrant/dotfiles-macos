@@ -11,6 +11,24 @@ alias reset-permissions='find . -type f -exec chmod 644 {} \; && find . -type d 
 # Media And File Manipulation #
 ###############################
 
+# Convert this to a function instead.
+
+# ==============================================================================
+# Will resize all images inside a folder. Images that matches the given format
+# will be overwritten.
+#
+# ARGUMENTS:
+# - $1 | The format: jpg/png.
+# - $3 | The maximum width in pixels.
+#
+# OUTPUTS: Resized images.
+# RETURNS: void
+function resize-image() {
+    local -r format="${1}"
+    local -r width="${3}"
+    mogrify -format $format -quality 80 -resize $width -strip *
+}
+
 # ==============================================================================
 # Appends a random number to the end of each file matching the given file
 # extension.
@@ -53,10 +71,10 @@ function pdf-to-jpg() {
 # ==============================================================================
 # Unblocks currently blocked social media websites. Must be used under sudo.
 #
-# - facebook
-# - youtube
-# - instagram
-# - twitter
+# - Facebook
+# - YouTube
+# - Instagram
+# - Twitter
 # OUTPUTS: The updated hosts file.
 #
 # RETURNS: void
@@ -71,10 +89,10 @@ function social() {
 # ==============================================================================
 # Blocks the current list of social media websites. Must be used under sudo.
 #
-# - facebook
-# - youtube
-# - instagram
-# - twitter
+# - Facebook
+# - YouTube
+# - Instagram
+# - Twitter
 #
 # OUTPUTS: The updated hosts file.
 # RETURNS: void
@@ -125,4 +143,74 @@ function generate-php-mysql-dump-script() {
     echo "\$dbuser = '$3';" >> $php_file_path
     echo "\$dbpass = '$4';" >> $php_file_path
     echo "exec(\"mysqldump --user=\$dbuser --password='\$dbpass' --host=\$dbhost \$dbname > ./database.sql\");" >> $php_file_path
+}
+
+#################################
+# WordPress Development Helpers #
+#################################
+
+# ==============================================================================
+# Uploads the provided SQL file into the MySQL container. Replaces the main
+# database used for the WordPress projects development.
+#
+# ARGUMENTS:
+# - $1 | The MySQL Docker container id.
+# - $2 | Relative path to the database file.
+#
+# OUTPUTS: void
+function wordpress-docker-upload-mysql-db() {
+    # all local WordPress projects uses the following MySQL passwords.
+    local loc_mysql_user="root"
+    local loc_mysql_password="my-secret-pw"
+    local loc_mysql_database="exampledb"
+
+    # upload database to local running container.
+    cat $2 | docker exec -i $1 /usr/bin/mysql --user="$loc_mysql_user" --password="$loc_mysql_password" $loc_mysql_database
+}
+
+# ==============================================================================
+# Changes the URL of a WordPress docker instance, using the WordPress CLI.
+#
+# ARGUMENTS:
+# - $1 | The WordPress Docker container id.
+# - $2 | The current URL.
+# - $3 | The replacement URL.
+#
+# OUTPUTS: void
+function wordpress-docker-replace-url() {
+    # install WordPress CLI.
+    docker exec -i $1 sh -c "cd /var/www/html && curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar"
+    docker exec -i $1 sh -c "cd /var/www/html && chmod +x wp-cli.phar"
+    docker exec -i $1 sh -c "cd /var/www/html && mv wp-cli.phar /usr/local/bin/wp"
+
+    # replace the sites URL.
+    docker exec -i $1 sh -c "cd /var/www/html && wp search-replace --all-tables '$2' '$3' --allow-root"
+}
+
+# ==============================================================================
+# Installs development plugins and de-activates plugins that might cause
+# production interferences.
+#
+# ARGUMENTS:
+# - $1 | The WordPress Docker container id.
+# - $2 | The current URL.
+# - $3 | The replacement URL.
+#
+# OUTPUTS: void
+# Corrects the permissions of a WordPress container.
+# $1, container id.
+function wordpress-docker-setup-dev-plugins() {
+    # deactivate plugins that might cause production related issues.
+    docker exec -i $1 sh -c "cd /var/www/html && wp plugin deactivate autoptimize --allow-root"
+    docker exec -i $1 sh -c "cd /var/www/html && wp plugin deactivate wordfence --allow-root"
+    docker exec -i $1 sh -c "cd /var/www/html && wp plugin deactivate autoptimize --allow-root"
+    docker exec -i $1 sh -c "cd /var/www/html && wp plugin deactivate easy-wp-smtp --allow-root"
+    docker exec -i $1 sh -c "cd /var/www/html && wp plugin deactivate wp-mail-smtp --allow-root"
+    docker exec -i $1 sh -c "cd /var/www/html && wp plugin deactivate wpcf7-recaptcha --allow-root"
+    docker exec -i $1 sh -c "cd /var/www/html && wp plugin deactivate login-recaptcha --allow-root"
+    docker exec -i $1 sh -c "cd /var/www/html && wp plugin deactivate wps-hide-login --allow-root"
+
+    # activate development plugins.
+    docker exec -i $1 sh -c "cd /var/www/html && wp plugin install disable-emails --activate --allow-root"
+    docker exec -i $1 sh -c "cd /var/www/html && wp plugin install query-monitor --activate --allow-root"
 }
