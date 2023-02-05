@@ -9,6 +9,9 @@
 # Z Shell
 !.zshrc
 
+# Tmux
+!.tmux.conf
+
 # Emacs
 !.emacs
 !.gnus

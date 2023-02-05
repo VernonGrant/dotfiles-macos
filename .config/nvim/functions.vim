@@ -15,6 +15,26 @@ if !exists("*ExploreWorking")
     endfunction
 endif
 
+if !exists("*ClippingsPrepare")
+    function! ClippingsPrepare()
+        normal gg0
+        execute ":g!/http/d"
+        execute ":sort"
+        execute ":sort u"
+    endfunction
+endif
+
+if !exists("*ShowHighlightGroup")
+    function! ShowHighlightGroup()
+        for i1 in synstack(line("."), col("."))
+            let i2 = synIDtrans(i1)
+            let n1 = synIDattr(i1, "name")
+            let n2 = synIDattr(i2, "name")
+            echo n1 "->" n2
+        endfor
+    endfunction
+endif
+
 if !exists("*LoadProjectVimrc")
     function! LoadProjectVimrc()
         let vimrcFile = findfile(".vimrc", ".;")

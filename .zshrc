@@ -7,6 +7,19 @@ alias clear-notifications='killall NotificationCenter'
 # Restore permissions to their defaults.
 alias reset-permissions='find . -type f -exec chmod 644 {} \; && find . -type d -exec chmod 755 {} \;'
 
+########
+# TMUX #
+########
+
+# Attaches Tmux to a session (example: ta portal).
+alias ta='tmux attach'
+
+# Kill all sessions.
+alias tka='tmux kill-server'
+
+# Setup Tmux sessions.
+alias ts="~/.scripts/tmux-setup-sessions.sh"
+
 ###############################
 # Media And File Manipulation #
 ###############################
@@ -46,6 +59,21 @@ function files-append-random-number() {
         echo ${i%.*};
         local new_name=${i%.*}-$RANDOM
         mv $i ./$new_name.$extension
+    done
+}
+
+# ==============================================================================
+# Converts all markdown files inside a folder into PDF files using Pandoc.
+#
+# ARGUMENTS:
+#
+# OUTPUTS: Resized images.
+# RETURNS: void
+function markdown-to-pdf() {
+    for i in *.md; do
+        [ -f "$i" ] || break
+        echo ${i%.*};
+        pandoc --pdf-engine=xelatex -f markdown-implicit_figures -t pdf ./${i%.*}.md > ./${i%.*}.pdf
     done
 }
 

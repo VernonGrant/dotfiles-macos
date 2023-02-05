@@ -179,6 +179,10 @@ vmap <leader>p d<left>"+p
 vmap <leader>d "+d
 vmap <leader>y "+y
 
+" Substitution
+nmap <leader>r :%s/<c-r><c-w>//<left>
+
+
 " Explore current files folder.
 nnoremap <silent> <leader>e :Ex<CR>
 nnoremap <silent> <leader>E :call ExploreWorking()<CR>
@@ -196,6 +200,7 @@ nnoremap <silent> <leader>l :BLines<CR>
 nnoremap <silent> <leader>L :Lines<CR>
 nnoremap <silent> <leader>s :Rg<CR>
 
+" TODO: Fix this binding conflict issue.
 " Center Pad.
 nnoremap <silent> <leader>c <cmd>lua require'centerpad'.toggle { leftpad = 50, rightpad = 50 }<cr>
 

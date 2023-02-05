@@ -26,8 +26,8 @@ call plug#end()
 
 syntax on
 set termguicolors
-set background=light
-colorscheme github-colors
+set background=dark
+colorscheme volcano
 
 " Make Vim transparent.
 hi Normal guibg=NONE ctermbg=NONE
