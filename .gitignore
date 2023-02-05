@@ -12,6 +12,9 @@
 # Tmux
 !.tmux.conf
 
+# Scripts
+!.scripts
+
 # Emacs
 !.emacs
 !.gnus
