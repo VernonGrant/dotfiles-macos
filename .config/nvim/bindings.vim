@@ -105,6 +105,10 @@
 " - <leader>y         | Yank visual selection system clipboard.
 " - <leader>p         | Past from system clipboard.
 "
+" Registers Insert Mode:
+"
+" - <C-r><C-w>        | Get the word under the cursor (Command Line).
+"
 " Visual Selection:
 "
 " - o                 | Move between start and end of visual selection.
