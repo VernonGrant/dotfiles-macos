@@ -8,6 +8,12 @@ alias clear-notifications='killall NotificationCenter'
 alias reset-permissions='find . -type f -exec chmod 644 {} \; && find . -type d -exec chmod 755 {} \;'
 
 ########
+# GIT #
+########
+
+alias git-set-origin-url='git remote set-url origin '
+
+########
 # TMUX #
 ########
 
@@ -171,6 +177,55 @@ function generate-php-mysql-dump-script() {
     echo "\$dbuser = '$3';" >> $php_file_path
     echo "\$dbpass = '$4';" >> $php_file_path
     echo "exec(\"mysqldump --user=\$dbuser --password='\$dbpass' --host=\$dbhost \$dbname > ./database.sql\");" >> $php_file_path
+}
+
+#########################
+# Remote Server Helpers #
+#########################
+
+# ==============================================================================
+# Pull files to a remote server.
+#
+# ARGUMENTS:
+# - $1 | The host name.
+# - $2 | The source path.
+# - $3 | The destination path.
+#
+# OUTPUTS: void
+function remote-pull-files() {
+    rsync -auv $1:$2 $3
+}
+
+# ==============================================================================
+# Upload files to a remote server.
+#
+# ARGUMENTS:
+# - $1 | The host name.
+# - $2 | The source path.
+# - $3 | The destination path.
+#
+# OUTPUTS: void
+function remote-push-files() {
+    rsync -auv $2 $1:$3
+}
+
+# ==============================================================================
+# Download a MYSQL database from remote server.
+#
+# ARGUMENTS:
+# - $1 | The host name.
+# - $2 | The MYSQL user name.
+# - $3 | The MYSQL user password.
+# - $4 | The MYSQL database name.
+# - $5 | The local destination of the SQL file.
+#
+# OUTPUTS: void
+function remote-pull-mysql-db() {
+    # dump database on server.
+    ssh $1 "mkdir -p ~/temp && mysqldump --user=\"$2\" --password=\"$3\" $4 > ~/temp/$4.sql && ls -la ~/temp/"
+
+    # Rsync it down.
+    rsync -auv $1:~/temp/$4.sql $5
 }
 
 #################################
