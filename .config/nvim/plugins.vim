@@ -83,55 +83,37 @@ lua << EOF
         vim.lsp.protocol.make_client_capabilities()
     )
 
-    -- TODO: Implement a loop here.
+    -- npm i -g intelephense \
+    --          bash-language-server \
+    --          vscode-langservers-extracted \
+    --          yaml-language-server \
+    --          dockerfile-language-server-nodejs \
+    --          typescript-language-server typescript
 
-    -- Clang
-    require'lspconfig'.clangd.setup{
-        on_attach=custom_attach,
-        capabilities = capabilities
+    -- Enabled configurations.
+    local lsp_configurations = {
+        "clangd",
+        "bashls",
+        "intelephense",
+        "html",
+        "cssls",
+        "yamlls",
+        "jsonls",
+        "dockerls",
+        "tsserver",
     }
 
-    -- Bash
-    require'lspconfig'.bashls.setup{
-        on_attach=custom_attach,
-        capabilities = capabilities
-    }
+    for i,v in ipairs(lsp_configurations) do
+        local config_setup_code = [[
+            require'lspconfig'.%s.setup{
+                on_attach=custom_attach,
+                capabilities = capabilities
+            }
+        ]]
 
-    -- PHP
-    require'lspconfig'.intelephense.setup{
-        on_attach=custom_attach,
-        capabilities = capabilities
-    }
+        load(string.format(config_setup_code, v))()
+    end
 
-    -- HTML
-    require'lspconfig'.html.setup{
-        on_attach=custom_attach,
-        capabilities = capabilities
-    }
-
-    -- CSS
-    require'lspconfig'.cssls.setup{
-        on_attach=custom_attach,
-        capabilities = capabilities
-    }
-
-    -- YAML
-    require'lspconfig'.yamlls.setup{
-        on_attach=custom_attach,
-        capabilities = capabilities
-    }
-
-    -- Docker Files
-    require'lspconfig'.dockerls.setup{
-        on_attach=custom_attach,
-        capabilities = capabilities
-    }
-
-    -- TypeScript and JavaScript
-    require'lspconfig'.tsserver.setup{
-        on_attach=custom_attach,
-        capabilities = capabilities
-    }
 EOF
 
 " Lua Line:
