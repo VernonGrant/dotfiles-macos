@@ -45,7 +45,7 @@ tmux-setup-session "Art-And-Piece"               "${DEVENV_PATH}/projects/art-an
 tmux-setup-session "Art-And-Piece-Digital-Books" "${DEVENV_PATH}/projects/art-and-piece-digital-books/source/aap-digital-books/"
 tmux-setup-session "Vernon-Grant"                "${DEVENV_PATH}/projects/vernon-grant/"
 tmux-setup-session "Volcano-Vim"                 "${DEVENV_PATH}/projects/volcano-vim"
-tmux-setup-session "Yellow-Bus"                  "${DEVENV_PATH}/projects/yellow-bus/source/breek-child/"
+tmux-setup-session "Yellow-Bus"                  "${DEVENV_PATH}/projects/yellow-bus/source/yellow-bus/"
 tmux-setup-session "Atelier-Noel"                "${DEVENV_PATH}/projects/atelier-noel/source/atelier-noel/"
 tmux-setup-session "ECSAF"                       "${DEVENV_PATH}/projects/ecsaf/source/ecsaf-flex/"
 tmux-setup-session "Christopher-Sin"             "${DEVENV_PATH}/projects/christopher-sin/source/"
