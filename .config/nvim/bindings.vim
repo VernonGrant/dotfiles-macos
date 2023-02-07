@@ -186,52 +186,49 @@ vmap <leader>y "+y
 " Substitution
 nmap <leader>r :%s/<c-r><c-w>//<left>
 
-
 " Explore current files folder.
-nnoremap <silent> <leader>e :Ex<CR>
-nnoremap <silent> <leader>E :call ExploreWorking()<CR>
+nnoremap <leader>e :Ex<CR>
+nnoremap <leader>E :call ExploreWorking()<CR>
 
 " Buffers cycling.
-nnoremap <silent> <leader>o :bn<CR>
-nnoremap <silent> <leader>i :bp<CR>
+nnoremap <leader>. :bn<CR>
+nnoremap <leader>, :bp<CR>
 
 " FZF
-nnoremap <silent> <leader>F :Files<CR>
-nnoremap <silent> <leader>f :GFiles<CR>
-nnoremap <silent> <leader>b :Buffers<CR>
-nnoremap <silent> <leader>h :History<CR>
-nnoremap <silent> <leader>l :BLines<CR>
-nnoremap <silent> <leader>L :Lines<CR>
-nnoremap <silent> <leader>s :Rg<CR>
+nnoremap <leader>F :Files<CR>
+nnoremap <leader>f :GFiles<CR>
+nnoremap <leader>b :Buffers<CR>
+nnoremap <leader>h :History<CR>
+nnoremap <leader>l :BLines<CR>
+nnoremap <leader>L :Lines<CR>
+nnoremap <leader>s :Rg<CR>
 
 " TODO: Fix this binding conflict issue.
 " Center Pad.
-nnoremap <silent> <leader>c <cmd>lua require'centerpad'.toggle { leftpad = 50, rightpad = 50 }<cr>
+nnoremap <leader>cc <cmd>lua require'centerpad'.toggle { leftpad = 50, rightpad = 50 }<cr>
 
 " Fugitive.
-nnoremap <silent> <leader>gg :Git<CR>
-nnoremap <silent> <leader>gp :Git push<CR>
-nnoremap <silent> <leader>gc :GCheckout<CR>
-nnoremap <silent> <leader>gh :Commits<CR>
-nnoremap <silent> <leader>gd :Gdiffsplit<CR>
-nnoremap <silent> <leader>gb :Git blame<CR>
+nnoremap <leader>gg :Git<CR>
+nnoremap <leader>gp :Git push<CR>
+nnoremap <leader>gc :GCheckout<CR>
+nnoremap <leader>gh :Commits<CR>
+nnoremap <leader>gd :Gdiffsplit<CR>
+nnoremap <leader>gb :Git blame<CR>
 
 " Quick Fix.
-nnoremap <silent><F2> :call QuickFixToggle()<CR>
-nnoremap <silent><F3> :cprevious<CR>
-nnoremap <silent><F4> :cnext<CR>
+nnoremap <F2> :call QuickFixToggle()<CR>
+nnoremap <F3> :cprevious<CR>
+nnoremap <F4> :cnext<CR>
 
 " External Programs.
-" nnoremap <silent> <leader>xt :!open -a Terminal %:p:h &<CR><CR>
 nnoremap <silent> <leader>ct :!kitty %:p:h &<CR><CR>
 nnoremap <silent> <leader>ce :!open %:p:h &<CR><CR>
 
 " Load project specific vimrc.
 nnoremap <F12> :call LoadProjectVimrc()<CR>
 
-"nnoremap <silent> <leader>ci :r ./
 " Insert a file into the current file.
-" nnoremap <F11> :r ./
+nnoremap  <leader>i :read ./
 
 " Notes.
 nnoremap <leader>cp :find /Users/vernon/Devenv/projects/<CR>
