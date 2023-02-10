@@ -35,6 +35,17 @@ if !exists("*ShowHighlightGroup")
     endfunction
 endif
 
+if !exists("*DoSectionComment")
+    function! DoSectionComment()
+        let has_vim_commentary = get(g:, 'loaded_commentary', 0)
+        if has_vim_commentary == 1
+            normal yyppv$r=kkv$r=Vjjgcc
+        else
+            echo "Please install vim commentary"
+        endif
+    endfunction
+endif
+
 if !exists("*LoadProjectVimrc")
     function! LoadProjectVimrc()
         let vimrcFile = findfile(".vimrc", ".;")

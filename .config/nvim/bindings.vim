@@ -227,6 +227,9 @@ nnoremap <silent> <leader>ce :!open %:p:h &<CR><CR>
 " Load project specific vimrc.
 nnoremap <F12> :call LoadProjectVimrc()<CR>
 
+" Section comment.
+nnoremap gcs :call DoSectionComment()<CR>
+
 " Insert a file into the current file.
 nnoremap  <leader>i :read ./
 
