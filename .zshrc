@@ -7,6 +7,9 @@ alias clear-notifications='killall NotificationCenter'
 # Restore permissions to their defaults.
 alias reset-permissions='find . -type f -exec chmod 644 {} \; && find . -type d -exec chmod 755 {} \;'
 
+# Always use terminal Emacs.
+alias emacs='emacs -nw'
+
 ########
 # GIT #
 ########

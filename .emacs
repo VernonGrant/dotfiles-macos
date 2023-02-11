@@ -78,7 +78,7 @@
 (setq-default max-mini-window-height 1) ;; Limit the minibuffer height.
 
 ;; Highlight current line.
-(global-hl-line-mode t)
+;; (global-hl-line-mode t)
 
 ;; Line numbers
 (global-display-line-numbers-mode)
@@ -162,7 +162,7 @@ VAL:"
 ;; Use OSX based system font.
 (if (eq system-type 'darwin)
     (set-face-attribute 'default nil
-                        :family "Menlo" :height 145 :weight 'normal))
+                        :family "Menlo" :height 130 :weight 'normal))
 
 ;; Use Windows based system font.
 (if (eq system-type 'windows-nt)
@@ -187,18 +187,6 @@ VAL:"
 (setq-default ido-everywhere t)
 (setq-default ido-auto-merge-work-directories-length -1)
 (ido-mode 1)
-
-;;;;;;;;;;;;;;;;;;
-;; Ubuntu XClip ;;
-;;;;;;;;;;;;;;;;;;
-
-;; For Ubuntu Xclip (sudo apt install xclip)
-(use-package xclip
-  :ensure t
-  :init
-  (custom-set-variables '(x-select-enable-clipboard t))
-  (custom-set-variables '(select-enable-clipboard t))
-  (xclip-mode 1))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; WL-Clipboard integration (Wayland/TMUX) ;;
@@ -229,7 +217,7 @@ VAL:"
 
 ;; Loading of theme.
 (setq-default custom-theme-load-path '("~/.emacs-themes"))
-(load-theme 'think t)
+(load-theme 'volcano t)
 
 ;; Make it transparent if we're in the terminal.
 (defun on-after-init ()
@@ -238,8 +226,8 @@ VAL:"
 (add-hook 'window-setup-hook 'on-after-init)
 
 ;; Make things transparent.
-(set-frame-parameter (selected-frame) 'alpha '(85 85))
-(add-to-list 'default-frame-alist '(alpha 85 85))
+(set-frame-parameter (selected-frame) 'alpha '(98 98))
+(add-to-list 'default-frame-alist '(alpha 98 98))
 
 ;;;;;;;;;;;;;;
 ;; Packages ;;
@@ -311,6 +299,14 @@ VAL:"
          ("C-c C-SPC" . company-complete)
          (:map company-active-map ("TAB" . company-complete-selection))))
 
+;;;;;;;;;;;;;;;
+;; Mac Usage ;;
+;;;;;;;;;;;;;;;
+
+(if (eq system-type 'darwin)
+    ;; Maximize Emacs window on start.
+    (add-to-list 'default-frame-alist '(fullscreen . maximized)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Code intellisense setup ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -355,8 +351,7 @@ VAL:"
    lsp-intelephense-format-enable nil
    lsp-intelephense-licence-key   (with-temp-buffer
                                     (insert-file-contents "~/.emacs-intelephense-license")
-                                    (buffer-string))
-   ))
+                                    (buffer-string))))
 
 ;; LSP-MODE:
 ;;
@@ -480,6 +475,7 @@ root on that."
   (insert ":")
   (forward-char 2))
 
+;; TODO: Make this method work for visual selections too
 (defun vg-duplicate-line()
   "Duplicate the current line."
   (interactive)
@@ -618,20 +614,20 @@ Will use that to format the active PHP file."
 ;; See:
 ;; https://github.com/VernonGrant/sidekick.el
 
-(use-package package-lint :ensure t)
+;; (use-package package-lint :ensure t)
 
-;; Add custom plugin development load path.
-(setq-default load-path (append load-path '("~/Devenv/projects/sidekick/")))
-(require 'sidekick)
+;; ;; Add custom plugin development load path.
+;; (setq-default load-path (append load-path '("~/Devenv/projects/sidekick/")))
+;; (require 'sidekick)
 
-;; Add custom web mode file associations.
-(sidekick-set-file-associations "web-mode" "*.{php,scss,css,html}")
-(sidekick-set-file-associations "clojure-mode" "*.clj")
+;; ;; Add custom web mode file associations.
+;; (sidekick-set-file-associations "web-mode" "*.{php,scss,css,html}")
+;; (sidekick-set-file-associations "clojure-mode" "*.clj")
 
-;; Add sidekick default bindings.
-(global-set-key (kbd "C-c k") 'sidekick-at-point)
-(global-set-key (kbd "C-c K") 'sidekick-focus-toggle)
-(global-set-key (kbd "C-c C-k") 'sidekick-search-for-literal)
+;; ;; Add sidekick default bindings.
+;; (global-set-key (kbd "C-c k") 'sidekick-at-point)
+;; (global-set-key (kbd "C-c K") 'sidekick-focus-toggle)
+;; (global-set-key (kbd "C-c C-k") 'sidekick-search-for-literal)
 
 ;;;;;;;;;;;;;;;;
 ;; Abbreviate ;;
@@ -640,12 +636,12 @@ Will use that to format the active PHP file."
 ;; See:
 ;; https://github.com/VernonGrant/abbreviate.el
 
-(setq-default load-path (append load-path '("~/Devenv/projects/abbreviate_el/")))
-(require 'abbreviate)
+;; (setq-default load-path (append load-path '("~/Devenv/projects/abbreviate_el/")))
+;; (require 'abbreviate)
 
-;; Add this to abbreviate.el
-(abbreviate-insert-abbreviations '(("function" . "func")))
-(global-set-key (kbd "C-c a") 'abbreviate-word-at-point)
+;; ;; Add this to abbreviate.el
+;; (abbreviate-insert-abbreviations '(("function" . "func")))
+;; (global-set-key (kbd "C-c a") 'abbreviate-word-at-point)
 
 ;;;;;;;;;;;;;;;
 ;; GDB Setup ;;
@@ -715,16 +711,6 @@ Use that to format the current C file."
 
 (add-hook 'clojure-mode-hook 'vg-clojure-set-local-bindings)
 
-;;;;;;;;;;;;;;;
-;; Mac Usage ;;
-;;;;;;;;;;;;;;;
-
-
-(if (eq system-type 'darwin)
-    ;; Maximize Emacs window on start.
-    (add-to-list 'default-frame-alist '(fullscreen . maximized))
-  )
-
 ;;;;;;;;;;;;;;
 ;; Key Maps ;;
 ;;;;;;;;;;;;;;
@@ -734,48 +720,21 @@ Use that to format the current C file."
 (define-key global-map (kbd "C-c f") 'vg-locate-project-file)
 (define-key global-map (kbd "C-c F") 'locate)
 
+;; Open recent files.
 (define-key global-map (kbd "C-c r") 'recentf-open-files)
 
 ;; Search code base.
 (define-key global-map (kbd "C-c s s") 'rgrep)
 
-;; Find other file.
-(define-key global-map (kbd "C-c o") 'ff-find-other-file)
-
 ;; Use Ibuffer instead.
 (define-key global-map (kbd "C-x C-b") 'ibuffer-other-window)
 
-;; Quickly open Emacs configuration.
-(define-key global-map (kbd "C-c 1")
-  (lambda ()
-    (interactive)
-    (find-file-other-window "~/.emacs")))
-
-;; duplicate a line.
+;; Duplicate a line.
 (define-key global-map (kbd "C-c d") 'vg-duplicate-line)
-
-;; Open agenda.
-(define-key global-map (kbd "C-c 2") 'vg-org-agenda-list-other-window)
 
 ;; Compile, make.
 (define-key global-map (kbd "C-c M") 'compile)
 (define-key global-map (kbd "C-c m") 'recompile)
-
-;; Browsing.
-(define-key global-map (kbd "C-c b b")
-  (lambda ()
-    (interactive)
-    (eww "https://google.com")))
-
-;; Open Emacs configuration.
-(define-key global-map (kbd "C-c 1")
-  (lambda ()
-    (interactive)
-    (find-file "~/.emacs")))
-(define-key global-map (kbd "C-c 4 1")
-  (lambda ()
-    (interactive)
-    (find-file-other-window "~/.emacs")))
 
 (define-key global-map (kbd "C-c e")
   (lambda ()
@@ -785,4 +744,25 @@ Use that to format the current C file."
 (define-key global-map (kbd "C-c t")
   (lambda ()
     (interactive)
-    (vg-async-shell-command-no-window "open -a Terminal .")))
+    (vg-async-shell-command-no-window "kitty .")))
+
+;; Open home folder.
+(define-key global-map (kbd "C-c 1")
+  (lambda ()
+    (interactive)
+    (find-file "~/")))
+
+;; Open projects folder.
+(define-key global-map (kbd "C-c 2")
+  (lambda ()
+    (interactive)
+    (find-file "~/Devenv/projects/")))
+
+;; Open notes folder.
+(define-key global-map (kbd "C-c 3")
+  (lambda ()
+    (interactive)
+    (find-file-other-window "~/Devenv/notes/")))
+
+;; Find other file.
+;; (define-key global-map (kbd "C-c o") 'ff-find-other-file)
