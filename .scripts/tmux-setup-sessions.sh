@@ -74,5 +74,5 @@ tmux-setup-session "Ruppell-Retainerships"       "${DEVENV_PATH}/projects/ruppel
 tmux-setup-session "Seedland-Flex"               "${DEVENV_PATH}/projects/seedland-flex/source/seedland_flex/"
 tmux-setup-session "Seedland-Foundation-Symfony" "${DEVENV_PATH}/projects/seedland-foundation-symfony/source/"
 tmux-setup-session "Vernon-Grant"                "${DEVENV_PATH}/projects/vernon-grant/"
-tmux-setup-session "Volcano-Vim"                 "${DEVENV_PATH}/projects/volcano-vim"
+tmux-setup-session "Volcano-Theme"               "${DEVENV_PATH}/projects/volcano-theme"
 tmux-setup-session "Yellow-Bus"                  "${DEVENV_PATH}/projects/yellow-bus/source/yellow-bus/"
