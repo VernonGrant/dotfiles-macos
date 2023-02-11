@@ -1,5 +1,4 @@
-;;; think-theme.el --- think theme
-
+;;; volcano-theme.el --- think theme
 ;; Copyright (C) 2022 by Vernon Grant
 
 ;; Author: Vernon Grant <vernon@ruppell.io>
@@ -22,29 +21,29 @@
 
 ;;; Commentary:
 ;;
-;; Think theme for Emacs, used by Vernon Grant.
+;; Volcano theme for Emacs, used by Vernon Grant.
 
 ;;; Code:
 
-(deftheme think
-  "think theme")
+(deftheme volcano
+  "volcano theme")
 
 (let (
-      (fg              "#d7d7af")
-      (fg-darker       "#d7d787")
+      (fg              "#B2B2B2")
+      (fg-darker       "#A4A4A4")
       (bg              "#303030")
       (bg-darker       "#262626")
-      (bg-lighter      "#444444")
-      (cursor          "#ff4500")
-      (region          "#444444")
-      (attention       "#ff5f00")
-      (keyword         "#afaf5f")
-      (constant        "#d7af5f")
-      (comment         "#af875f")
-      (string          "#8fbc8f")
-      (warning         "#d75f00"))
+      (bg-lighter      "#404040")
+      (cursor          "#D75F5F")
+      (region          "#404040")
+      (attention       "#D75F5F")
+      (keyword         "#AF875F")
+      (constant        "#CDB38B")
+      (comment         "#AF5F5F")
+      (string          "#AFD787")
+      (warning         "#D7875F"))
   (custom-theme-set-faces
-   'think
+   'volcano
 
    ;; General
    `(default                              ((t (:background ,bg :foreground ,fg))))
@@ -153,8 +152,8 @@
    `(web-mode-html-attr-name-face         ((t (:foreground ,keyword))))
 
    ;; Cider
-   `(cider-enlightened-face               ((t (:background ,bg))))
-   `(cider-result-overlay-face            ((t (:background ,bg))))
+   ;; `(cider-enlightened-face               ((t (:background ,bg))))
+   ;; `(cider-result-overlay-face            ((t (:background ,bg))))
    )
   )
 
@@ -162,6 +161,6 @@
 (when load-file-name
   (add-to-list 'custom-theme-load-path
                (file-name-as-directory (file-name-directory load-file-name))))
-(provide-theme 'think)
+(provide-theme 'volcano)
 
-;;; think-theme.el ends here
+;;; volcano-theme.el ends here
