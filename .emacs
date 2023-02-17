@@ -5,6 +5,10 @@
 ;; Keyboard shortcut reminders can be found here:
 ;; https://github.com/VernonGrant/emacs-keyboard-shortcuts
 
+;; Install the following system tools:
+;; - brew install ispell
+;; - brew install findutils
+
 ;;; Code:
 
 ;;;;;;;;;;;
@@ -179,6 +183,7 @@ VAL:"
 ;; Add NVM's node path.
 (setq-default exec-path (append exec-path '("~/.nvm/versions/node/v18.12.1/bin")))
 
+
 ;;;;;;;;;;;;;;;
 ;; I Do Mode ;;
 ;;;;;;;;;;;;;;;
@@ -238,6 +243,7 @@ VAL:"
   (unless (require 'use-package nil 'noerror) (package-install 'use-package))
   (require 'use-package))
 
+
 (use-package markdown-mode :ensure t)
 (use-package json-mode :ensure t)
 (use-package typescript-mode :ensure t)
@@ -253,6 +259,11 @@ VAL:"
   :config
   (add-to-list 'auto-mode-alist '("\\.vert\\'" . glsl-mode))
   (add-to-list 'auto-mode-alist '("\\.frag\\'" . glsl-mode)))
+
+;; (use-package exec-path-from-shell
+;;   :ensure t
+;;   :init
+;;   (exec-path-from-shell-initialize))
 
 (use-package magit
   :ensure t
@@ -277,7 +288,9 @@ VAL:"
   :ensure t
   :config
   (setq-default web-mode-enable-auto-expanding nil)
-  (add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode)))
+  (add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode))
+  ;; Shopify:
+  (add-to-list 'auto-mode-alist '("\\.liquid\\'" . web-mode)))
 
 (use-package yasnippet
   :ensure t
@@ -306,6 +319,9 @@ VAL:"
 (if (eq system-type 'darwin)
     ;; Maximize Emacs window on start.
     (add-to-list 'default-frame-alist '(fullscreen . maximized)))
+
+;; Add home brew.
+;; (setq-default exec-path (append exec-path '("/opt/homebrew/bin/")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Code intellisense setup ;;
@@ -443,7 +459,7 @@ VAL:"
 ;; Functions ;;
 ;;;;;;;;;;;;;;;
 
-(defun vg-get-project-root()
+(defun vg-get-the-project-path()
   "Get's a projects root directory if found.
 Tries to find the .git folder or a .dirlocals.el file and basis the projects
 root on that."
@@ -458,9 +474,60 @@ root on that."
     ;; Can't find root, just return the default directory.
     (expand-file-name default-directory)))
 
+;;;;;;;;;;;;
+;; Locate ;;
+;;;;;;;;;;;;
+
+;; We need to define this environment variable to specify the database to use.
+(setenv "LOCATE_PATH" "/Users/vernon/locate-database")
+
+;; The g-prefix is required for Mac, when installing findutils via brew.
+(setq-default locate-command "glocate")
+(setq-default locate-update-command "gupdatedb")
+
+(defun vg-locate-in-project-scope()
+  "Call locate with the current projects root path being the filter."
+  (interactive)
+  (let ((match (read-string "Locate: ")))
+    (locate-with-filter match (vg-get-the-project-path))))
+
+(defun vg-locate-update()
+  "Update the locate database."
+  (interactive)
+  (let (
+        ;; Define your projects folder path here.
+        (projects-folder-path "/Users/vernon/Devenv")
+        (locate-database-path (getenv "LOCATE_PATH")))
+    (message "Updating locate database...")
+    (shell-command     (mapconcat 'identity
+                                  (list
+                                   "gupdatedb"
+                                   (concat "--localpaths=" projects-folder-path)
+                                   (concat "--output=" locate-database-path))
+                                  " "))
+    (message "Database has been updated!")))
+
+;; Setting our custom bindings.
+(define-key global-map (kbd "C-c f") 'vg-locate-in-project-scope)
+(define-key global-map (kbd "C-c F") 'vg-locate-update)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Interactive Functions ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun vg-unfill-paragraph ()
+  "Replace newline chars in current paragraph by single spaces.
+This command does the reverse of `fill-paragraph'."
+  (interactive)
+  (let ((fill-column 90002000))
+    (fill-paragraph nil)))
+
+(defun vg-unfill-region (start end)
+  "Replace newline chars in region by single spaces.
+This command does the reverse of `fill-region'."
+  (interactive "r")
+  (let ((fill-column 90002000))
+    (fill-region start end)))
 
 (defun vg-insert-rss-timestamp()
   "Insert the current data time stamp in the format of RFC-822."
@@ -514,12 +581,6 @@ COMMAND: The shell command."
       (unhighlight-regexp (car (car hi-lock-interactive-patterns)))
     (highlight-symbol-at-point)))
 (global-set-key (kbd "C-c hh") 'vg-toggle-mark-word-at-point)
-
-(defun vg-locate-project-file()
-  "Call locate with the current projects root path being the filter."
-  (interactive)
-  (let ((match (read-string "Locate: ")))
-    (locate-with-filter match (vg-get-project-root))))
 
 (defun xah-insert-random-number (NUM)
   "Insert NUM random digits.
@@ -715,11 +776,6 @@ Use that to format the current C file."
 ;; Key Maps ;;
 ;;;;;;;;;;;;;;
 
-;; Finding files inside a project without 3rd party tools and insane speed.
-;; Use the command: locate
-(define-key global-map (kbd "C-c f") 'vg-locate-project-file)
-(define-key global-map (kbd "C-c F") 'locate)
-
 ;; Open recent files.
 (define-key global-map (kbd "C-c r") 'recentf-open-files)
 
@@ -747,22 +803,50 @@ Use that to format the current C file."
     (vg-async-shell-command-no-window "kitty .")))
 
 ;; Open home folder.
-(define-key global-map (kbd "C-c 1")
+(define-key global-map (kbd "C-c h")
   (lambda ()
     (interactive)
     (find-file "~/")))
 
 ;; Open projects folder.
-(define-key global-map (kbd "C-c 2")
+(define-key global-map (kbd "C-c p")
   (lambda ()
     (interactive)
     (find-file "~/Devenv/projects/")))
 
 ;; Open notes folder.
-(define-key global-map (kbd "C-c 3")
+(define-key global-map (kbd "C-c n")
   (lambda ()
     (interactive)
-    (find-file-other-window "~/Devenv/notes/")))
+    (find-file "~/Devenv/notes/")))
+
+;; Create a new note.
+(define-key global-map (kbd "C-c N")
+  (lambda ()
+  (interactive)
+  (let ((notes-file-extention ".md")
+        (notes-file-heading-prefix "# ")
+        (notes-directory "~/Devenv/notes/notebook/")
+        (note-name (replace-regexp-in-string
+                    " "
+                    "-"
+                    (downcase (read-string "Note Name: "))))
+        (note-date-string (format-time-string "%Y-%m-%d-")))
+
+    ;; Create the new note file.
+    (find-file-other-window (concat
+                notes-directory
+                note-date-string
+                note-name
+                notes-file-extention))
+
+    ;; Add title to note file.
+    (insert (concat
+             notes-file-heading-prefix)
+            (replace-regexp-in-string "-" " " (capitalize note-name)))
+
+    ;; Save note.
+    (save-buffer))))
 
 ;; Find other file.
 ;; (define-key global-map (kbd "C-c o") 'ff-find-other-file)

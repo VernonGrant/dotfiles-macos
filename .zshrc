@@ -29,6 +29,16 @@ alias tka='tmux kill-server'
 # Setup Tmux sessions.
 alias ts="~/.scripts/tmux-setup-sessions.sh"
 
+#########################
+# Locate Customizations #
+#########################
+
+alias locate='glocate'
+
+alias locate-update='gupdatedb --localpaths=/Users/vernon/Devenv/ --output=/Users/vernon/locate-database'
+
+export LOCATE_PATH='/Users/vernon/locate-database'
+
 ###############################
 # Media And File Manipulation #
 ###############################
@@ -41,13 +51,13 @@ alias ts="~/.scripts/tmux-setup-sessions.sh"
 #
 # ARGUMENTS:
 # - $1 | The format: jpg/png.
-# - $3 | The maximum width in pixels.
+# - $2 | The maximum width in pixels.
 #
 # OUTPUTS: Resized images.
 # RETURNS: void
 function resize-image() {
     local -r format="${1}"
-    local -r width="${3}"
+    local -r width="${2}"
     mogrify -format $format -quality 80 -resize $width -strip *
 }
 
