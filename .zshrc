@@ -8,7 +8,7 @@ alias clear-notifications='killall NotificationCenter'
 alias reset-permissions='find . -type f -exec chmod 644 {} \; && find . -type d -exec chmod 755 {} \;'
 
 # Always use terminal Emacs.
-alias emacs='emacs -nw'
+# alias emacs='emacs -nw'
 
 ########
 # GIT #
@@ -103,13 +103,44 @@ function markdown-to-pdf() {
 # - $1 | The name of the PDF file.
 #
 # REQUIRES:
-# - brew install poppler
+# - brew install popper
 #
 # OUTPUTS: void
 # RETURNS: void
 function pdf-to-jpg() {
     pdftoppm -jpeg -rx 200 -ry 200 $1 page
 }
+
+# ==============================================================================
+# Marks an invoice as paid.
+#
+# ARGUMENTS:
+# - $1 | The PDF source invoice path.
+# - $2 | Should the chop be added, default false.
+#
+# REQUIRES:
+# - brew install qpdf
+#
+# OUTPUTS: void
+# RETURNS: void
+function mark-invoice-paid() {
+    local -r pdf_source_path=$1
+    local -r pdf_file_name=$(basename -s .pdf "$1")
+    local -r pdf_result_file_name="${pdf_file_name}-paid.pdf"
+    local overlay_marker="/Users/vernon/Documents/paid-marker.pdf"
+
+    local -r signed="$2"
+    if [ "$signed" = "true" ];
+    then
+        overlay_marker="/Users/vernon/Documents/paid-marker-signed.pdf"
+    fi;
+
+    qpdf $pdf_source_path --overlay \
+         $overlay_marker \
+         --to=z -- "./${pdf_result_file_name}"
+
+}
+
 
 ##############################
 # Block Social Media Helpers #
