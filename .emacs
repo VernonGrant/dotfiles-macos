@@ -48,9 +48,6 @@
 ;; Disable line wrapping.
 (set-default 'truncate-lines -1)
 
-;; Enable delete region selection deletion.
-(delete-selection-mode 1)
-
 ;; Show column and line numbers
 (setq-default column-number-mode t)
 
@@ -59,8 +56,12 @@
 
 ;; Mark ring settings.
 (setq-default set-mark-command-repeat-pop t)
-(setq-default global-mark-ring-max 16)
-(setq-default mark-ring-max 8)
+(setq-default global-mark-ring-max 8)
+(setq-default mark-ring-max 6)
+
+;; Enable delete region selection deletion.
+(delete-selection-mode 1)
+;; (transient-mark-mode 1)
 
 ;; Save backup files to specific folder.
 (setq-default backup-directory-alist `(("." . "~/.emacs-saves")))
@@ -82,11 +83,10 @@
 (setq-default max-mini-window-height 1) ;; Limit the minibuffer height.
 
 ;; Highlight current line.
-;; (global-hl-line-mode t)
+(global-hl-line-mode t)
 
 ;; Line numbers
 (global-display-line-numbers-mode)
-;; (setq-default display-line-numbers-type 'relative)
 
 ;; Unbind the most annoying thing ever.
 (define-key global-map (kbd "C-z") nil)
@@ -183,7 +183,6 @@ VAL:"
 ;; Add NVM's node path.
 (setq-default exec-path (append exec-path '("~/.nvm/versions/node/v18.12.1/bin")))
 
-
 ;;;;;;;;;;;;;;;
 ;; I Do Mode ;;
 ;;;;;;;;;;;;;;;
@@ -220,13 +219,12 @@ VAL:"
 ;; Think Theme ;;
 ;;;;;;;;;;;;;;;;;
 
-;; Loading of theme.
 (setq-default custom-theme-load-path '("~/.emacs-themes"))
 (load-theme 'volcano t)
 
 ;; Make it transparent if we're in the terminal.
 (defun on-after-init ()
-    (unless (display-graphic-p (selected-frame))
+  (unless (display-graphic-p (selected-frame))
     (set-face-background 'default "unspecified-bg" (selected-frame))))
 (add-hook 'window-setup-hook 'on-after-init)
 
@@ -243,7 +241,6 @@ VAL:"
   (unless (require 'use-package nil 'noerror) (package-install 'use-package))
   (require 'use-package))
 
-
 (use-package markdown-mode :ensure t)
 (use-package json-mode :ensure t)
 (use-package typescript-mode :ensure t)
@@ -259,11 +256,6 @@ VAL:"
   :config
   (add-to-list 'auto-mode-alist '("\\.vert\\'" . glsl-mode))
   (add-to-list 'auto-mode-alist '("\\.frag\\'" . glsl-mode)))
-
-;; (use-package exec-path-from-shell
-;;   :ensure t
-;;   :init
-;;   (exec-path-from-shell-initialize))
 
 (use-package magit
   :ensure t
@@ -322,6 +314,24 @@ VAL:"
 
 ;; Add home brew.
 ;; (setq-default exec-path (append exec-path '("/opt/homebrew/bin/")))
+
+;;;;;;;;;;;;;;;;;;;;;;;
+;; Presentation Mode ;;
+;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun vg-presentation-toggle()
+  "Change font size for presentaion use."
+  (interactive)
+  (defvar vg-presentation-mode nil)
+  (if vg-presentation-mode
+      (progn
+        (setq vg-presentation-mode nil)
+        (set-face-attribute 'default nil :family "Menlo" :height 130 :weight 'normal))
+    (progn
+      (setq vg-presentation-mode t)
+      (set-face-attribute 'default nil :family "Menlo" :height 200 :weight 'normal))))
+
+(define-key global-map (kbd "<f12>") 'vg-presentation-toggle)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Code intellisense setup ;;
@@ -451,7 +461,6 @@ VAL:"
   ;; Disable jshint since we prefer eslint checking
   (setq-default flycheck-disabled-checkers
                 (append flycheck-disabled-checkers '(javascript-jshint)))
-  (flycheck-add-mode 'php-phpcs 'php-mode)
   (flycheck-add-mode 'php-phpcs 'web-mode)
   (setq-default flycheck-checker-error-threshold 100))
 
@@ -581,6 +590,7 @@ COMMAND: The shell command."
       (unhighlight-regexp (car (car hi-lock-interactive-patterns)))
     (highlight-symbol-at-point)))
 (global-set-key (kbd "C-c hh") 'vg-toggle-mark-word-at-point)
+;; TODO: handle key conflict, with home directory.
 
 (defun xah-insert-random-number (NUM)
   "Insert NUM random digits.
@@ -697,12 +707,12 @@ Will use that to format the active PHP file."
 ;; See:
 ;; https://github.com/VernonGrant/abbreviate.el
 
-;; (setq-default load-path (append load-path '("~/Devenv/projects/abbreviate_el/")))
-;; (require 'abbreviate)
+(setq-default load-path (append load-path '("~/Devenv/projects/abbreviate-el/")))
+(require 'abbreviate)
 
 ;; ;; Add this to abbreviate.el
-;; (abbreviate-insert-abbreviations '(("function" . "func")))
-;; (global-set-key (kbd "C-c a") 'abbreviate-word-at-point)
+(abbreviate-insert-abbreviations '(("function" . "func")))
+(global-set-key (kbd "C-c a") 'abbreviate-word-at-point)
 
 ;;;;;;;;;;;;;;;
 ;; GDB Setup ;;
@@ -775,6 +785,9 @@ Use that to format the current C file."
 ;;;;;;;;;;;;;;
 ;; Key Maps ;;
 ;;;;;;;;;;;;;;
+
+;; Save the current buffer.
+(define-key global-map (kbd "<C-return>") 'save-buffer)
 
 ;; Open recent files.
 (define-key global-map (kbd "C-c r") 'recentf-open-files)
