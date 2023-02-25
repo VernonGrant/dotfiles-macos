@@ -27,8 +27,7 @@
 
 (require 'color)
 
-(deftheme volcano
-  "volcano theme")
+(deftheme volcano  "A dark theme of orange, yellow and red.")
 
 (let* (
       (fg              "#B2B2B2")
